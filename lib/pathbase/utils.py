@@ -8,7 +8,7 @@ FORMAT_TOKEN_PATTERNS = {"frame_rate": r"\d+(?:\.\d+)?"}
 
 
 def parse_format(format_value, write_format, token_patterns=None):
-    """Split a {format} value back into its MAG_WRITE_FORMAT tokens.
+    """Split a {format} value back into its original tokens.
 
     The reverse of how construct_write_path builds fields["format"]. Works
     with any tokens and separators in the pattern, e.g. "{a}-{b}_{c}".
@@ -22,20 +22,16 @@ def parse_format(format_value, write_format, token_patterns=None):
 
     Args:
         format_value (str): The {format} part of a path, e.g.
-            "LL180-ap1cg-24".
+            "foo-bar-spam".
         write_format (str): Format pattern to parse with.
         token_patterns (dict, optional): Token name mapped to a regex its
-            value must match, e.g. {"projection": r"LL\\d+|rect"}.
+            value must match.
 
     Returns:
-        dict: Token name mapped to its value as it appears in the path
-        (frame_rate floored), e.g.
-        {"projection": "LL180", "color_transform": "ap1cg",
-        "frame_rate": "24"} for "{projection}-{color_transform}-{frame_rate}".
+        dict: Token name mapped to its value as it appears in the path.
 
     Raises:
-        ValueError: If MAG_WRITE_FORMAT isn't set or format_value doesn't fit
-            it.
+        ValueError: If format_value doesn't fit write_format.
     """
 
     token_patterns = {**FORMAT_TOKEN_PATTERNS, **(token_patterns or {})}
